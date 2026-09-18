@@ -11,24 +11,25 @@ public class QuickSort {
     }
 
     private static void quickSort(int[] array, int low, int high, int depth, Metrics metrics) {
-        int currentDepth = depth;
+        metrics.maxDepth = Math.max(metrics.maxDepth, depth);
 
         while (low < high) {
-            metrics.maxDepth = Math.max(metrics.maxDepth, currentDepth);
             int[] bounds = partition(array, low, high, metrics);
             int left = bounds[0];
             int right = bounds[1];
 
             if (left - low < high - right) {
-                quickSort(array, low, left - 1, currentDepth + 1, metrics);
+                if (left - low > 0) {
+                    quickSort(array, low, left - 1, depth + 1, metrics);
+                }
                 low = right + 1;
             } else {
-                quickSort(array, right + 1, high, currentDepth + 1, metrics);
+                if (high - right > 0) {
+                    quickSort(array, right + 1, high, depth + 1, metrics);
+                }
                 high = left - 1;
             }
-            currentDepth++;
         }
-        metrics.maxDepth = Math.max(metrics.maxDepth, currentDepth);
     }
 
     public static int[] partition(int[] array, int low, int high, Metrics metrics) {
